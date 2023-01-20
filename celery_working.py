@@ -1,7 +1,9 @@
 import datetime
 from celery import Celery
+import os
 
-app = Celery('celery_working', broker='pyamqp://guest@localhost//')
+rabbit_host = os.environ.get("RABBIT_HOST", "localhost")
+app = Celery('celery_working', broker=f'pyamqp://guest@{rabbit_host}//')
 
 # app.conf.beat_schedule = {
 #     'add-every-30-seconds': {
