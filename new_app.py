@@ -1,6 +1,5 @@
 from flask import Flask, request, render_template
 from celery_working import add
-from database_function import DataBaseManager
 import al_db
 import models_db
 from sqlalchemy import select
