@@ -1,5 +1,9 @@
 from flask import Flask, request, render_template
 from celery_working import add
+from database_function import DataBaseManager
+import al_db
+import models_db
+from sqlalchemy import select
 
 app = Flask(__name__)
 from database_function import DataBaseManager, generate_data
@@ -8,7 +12,12 @@ from database_function import DataBaseManager, generate_data
 @app.route("/", methods=["GET", "POST"])
 def login_user():
     if request.method == "GET":
-        pass
+        al_db.init_db()
+        conn = al_db.engine.connect()
+        res1 = select([models_db.User])
+        result = conn.execute(res1)
+        data_res = result.fetchall()
+        print(result)
     else:
         pass
     return "<p>Login!</p>"
@@ -40,9 +49,11 @@ def currency_converter():
 
         with DataBaseManager() as db:
             buy_rate_1, sale_rate_1 = db.get_result(
-                f'SELECT buy_rate, sale_rate FROM currency WHERE bank="{user_bank}" and date_exchange="{user_date}" and currency="{user_currency_1}"')
+                f'SELECT buy_rate, sale_rate FROM currency WHERE bank="{user_bank}" and date_exchange="{user_date}" and currency="{user_currency_1}"'
+            )
             buy_rate_2, sale_rate_2 = db.get_result(
-                f'SELECT buy_rate, sale_rate FROM currency WHERE bank="{user_bank}" and date_exchange="{user_date}" and currency="{user_currency_2}"')
+                f'SELECT buy_rate, sale_rate FROM currency WHERE bank="{user_bank}" and date_exchange="{user_date}" and currency="{user_currency_2}"'
+            )
 
         cur_exchange_buy = buy_rate_2 / buy_rate_1
         cur_exchange_sale = sale_rate_2 / sale_rate_1
