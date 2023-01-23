@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float
 from al_db import Base
 
-class User(Base):
+class Currency(Base):
     __tablename__ = 'currency'
     id = Column(Integer, primary_key=True, unique=True)
     bank = Column(String(50))
@@ -17,5 +17,3 @@ class User(Base):
         self.buy_rate = buy_rate
         self.sale_rate = sale_rate
 
-    def __repr__(self):
-        return f'<User {self.name!r}>'
